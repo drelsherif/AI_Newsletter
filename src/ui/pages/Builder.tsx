@@ -102,6 +102,39 @@ const BLOCK_DEFAULTS: Record<Block["type"], (issue: Issue) => Record<string, unk
     _md: "Article summary goes here.",
     linkText: "Read more →",
   }),
+
+  spotlight: () => ({
+    badge: "Spotlight",
+    kicker: "Featured this issue",
+    title: "Spotlight Headline",
+    source: "",
+    href: "",
+    imageSrc: "",
+    imageAlt: "",
+    takeaways: parseMarkdown("**Why it matters:**\n- Point one\n- Point two"),
+    _takeawaysMd: "**Why it matters:**\n- Point one\n- Point two",
+    myView: parseMarkdown("**My take:**\nAdd your perspective here."),
+    _myViewMd: "**My take:**\nAdd your perspective here.",
+    linkText: "Read full article →",
+  }),
+  articlePair: () => ({
+    left: {
+      title: "Article A",
+      source: "",
+      href: "",
+      summary: parseMarkdown("Summary A..."),
+      _md: "Summary A...",
+      linkText: "Read more →",
+    },
+    right: {
+      title: "Article B",
+      source: "",
+      href: "",
+      summary: parseMarkdown("Summary B..."),
+      _md: "Summary B...",
+      linkText: "Read more →",
+    },
+  }),
   ticker: () => ({
     items: "First headline • Second item • Third announcement",
   }),
@@ -125,6 +158,59 @@ const BLOCK_DEFAULTS: Record<Block["type"], (issue: Issue) => Record<string, unk
     align: "center",
   }),
   spacer: () => ({ height: 24 }),
+  linkList: () => ({
+    title: "Quick Links",
+    items: [
+      { label: "Add a link…", href: "https://example.com", meta: "Optional note" },
+    ],
+  }),
+  governance: () => ({
+    badge: "Governance / Legal",
+    title: "Regulatory update",
+    body: parseMarkdown("Write a short governance/legal note with links."),
+    _md: "Write a short governance/legal note with links.",
+  }),
+  sbarp: () => ({
+    title: "SBAR-P",
+    situation: parseMarkdown("Situation…"),
+    _situationMd: "Situation…",
+    background: parseMarkdown("Background…"),
+    _backgroundMd: "Background…",
+    assessment: parseMarkdown("Assessment…"),
+    _assessmentMd: "Assessment…",
+    recommendation: parseMarkdown("Recommendation…"),
+    _recommendationMd: "Recommendation…",
+    prompt: parseMarkdown("Paste the prompt you used (or want readers to try)."),
+    _promptMd: "Paste the prompt you used (or want readers to try).",
+  }),
+  prompt: () => ({
+    title: "Prompt like a Rockstar",
+    template: parseMarkdown("**Template:**\nYou are…\nTask…\nConstraints…\nOutput format…"),
+    _templateMd: "**Template:**\nYou are…\nTask…\nConstraints…\nOutput format…",
+    good: parseMarkdown("A strong, specific prompt example."),
+    _goodMd: "A strong, specific prompt example.",
+    bad: parseMarkdown("A vague prompt example."),
+    _badMd: "A vague prompt example.",
+    tips: parseMarkdown("- Make it specific\n- Ask for structure\n- Include constraints"),
+    _tipsMd: "- Make it specific\n- Ask for structure\n- Include constraints",
+  }),
+  term: () => ({
+    term: "Agentic Workflow",
+    definition: parseMarkdown("Define the term in 1–2 sentences."),
+    _definitionMd: "Define the term in 1–2 sentences.",
+    why: parseMarkdown("Explain why it matters clinically / operationally."),
+    _whyMd: "Explain why it matters clinically / operationally.",
+  }),
+  history: () => ({
+    title: "AI History",
+    body: parseMarkdown("A quick timeline nugget."),
+    _md: "A quick timeline nugget.",
+  }),
+  humor: () => ({
+    title: "AI Humor",
+    body: parseMarkdown("A one-liner or short meme caption."),
+    _md: "A one-liner or short meme caption.",
+  }),
   rss: () => ({
     feedIds: [],
     maxArticles: 10,
@@ -1499,6 +1585,13 @@ function Inspector({ section: _sec, block, issue, patch, updateLabel, remove }: 
       {block.type === "button" && <ButtonInspector d={d} patch={patch} />}
       {block.type === "spacer" && <SpacerInspector d={d} patch={patch} />}
       {block.type === "rss" && <RssInspector d={d} patch={patch} issue={issue} />}
+{block.type === "linkList" && <LinkListInspector d={d} patch={patch} />}
+{block.type === "governance" && <GovernanceInspector d={d} patch={patch} />}
+{block.type === "sbarp" && <SbarpInspector d={d} patch={patch} />}
+{block.type === "prompt" && <PromptInspector d={d} patch={patch} />}
+{block.type === "term" && <TermInspector d={d} patch={patch} />}
+{block.type === "history" && <HistoryInspector d={d} patch={patch} />}
+{block.type === "humor" && <HumorInspector d={d} patch={patch} />}
 
       <div className="nf-inspector-divider" />
       <button
@@ -1614,16 +1707,42 @@ function TickerInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: 
   const raw = Array.isArray(d.items)
     ? (d.items as string[]).join(" • ")
     : ((d.items as string) ?? "");
+
+  const scroll = (d.scroll as boolean) ?? true;
+  const speed = (d.speed as string) ?? "medium";
+
   return (
-    <Field label="Items (separate with •)">
-      <textarea
-        value={raw}
-        onChange={(e) => patch({ items: e.target.value })}
-        placeholder="First item • Second item • Third item"
-        style={{ minHeight: 72 }}
-      />
-      <span className="nf-hint">Separate each item with a bullet character •</span>
-    </Field>
+    <>
+      <Field label="Items (separate with •)">
+        <textarea
+          value={raw}
+          onChange={(e) => patch({ items: e.target.value })}
+          placeholder="First item • Second item • Third item"
+          style={{ minHeight: 72 }}
+        />
+        <span className="nf-hint">Separate each item with a bullet character •</span>
+      </Field>
+
+      <Field label="Scroll">
+        <label className="nf-inline">
+          <input
+            type="checkbox"
+            checked={scroll}
+            onChange={(e) => patch({ scroll: e.target.checked })}
+          />
+          <span>Enable scrolling ticker (viewer/web)</span>
+        </label>
+        <span className="nf-hint">Email export renders a static ticker (no animations).</span>
+      </Field>
+
+      <Field label="Speed">
+        <select value={speed} onChange={(e) => patch({ speed: e.target.value })}>
+          <option value="slow">Slow</option>
+          <option value="medium">Medium</option>
+          <option value="fast">Fast</option>
+        </select>
+      </Field>
+    </>
   );
 }
 
@@ -1913,6 +2032,314 @@ function RssInspector({ d, patch, issue }: { d: Record<string, unknown>; patch: 
           <option value="compact">Compact (title only)</option>
           <option value="grid">Grid (card layout)</option>
         </select>
+      </Field>
+    </>
+  );
+}
+
+function SpotlightInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const [whyMd, setWhyMd] = useState((d._takeawaysMd as string) ?? "");
+  const [myMd, setMyMd] = useState((d._myViewMd as string) ?? "");
+  useEffect(() => { setWhyMd((d._takeawaysMd as string) ?? ""); }, [d._takeawaysMd]);
+  useEffect(() => { setMyMd((d._myViewMd as string) ?? ""); }, [d._myViewMd]);
+
+  return (
+    <>
+      <Field label="Badge">
+        <input value={(d.badge as string) ?? ""} onChange={(e) => patch({ badge: e.target.value })} placeholder="Spotlight" />
+      </Field>
+      <Field label="Kicker (optional)">
+        <input value={(d.kicker as string) ?? ""} onChange={(e) => patch({ kicker: e.target.value })} placeholder="Featured this issue" />
+      </Field>
+      <Field label="Title">
+        <input value={(d.title as string) ?? ""} onChange={(e) => patch({ title: e.target.value })} placeholder="Spotlight headline" />
+      </Field>
+      <Field label="Source">
+        <input value={(d.source as string) ?? ""} onChange={(e) => patch({ source: e.target.value })} placeholder="Journal / Publisher" />
+      </Field>
+      <Field label="URL">
+        <input
+          value={(d.href as string) ?? ""}
+          onChange={(e) => patch({ href: e.target.value })}
+          onBlur={(e) => patch({ href: normalizeUrl(e.target.value) })}
+          placeholder="https://..."
+          type="url"
+        />
+      </Field>
+      <Field label="Image URL (optional)">
+        <input value={(d.imageSrc as string) ?? ""} onChange={(e) => patch({ imageSrc: e.target.value })} placeholder="https://.../image.png" />
+        <span className="nf-hint">Tip: you can also use the Image block if you want a standalone image.</span>
+      </Field>
+
+      <Field label="Why it matters (Markdown)">
+        <textarea
+          value={whyMd}
+          onChange={(e) => {
+            setWhyMd(e.target.value);
+            patch({ _takeawaysMd: e.target.value, takeaways: parseMarkdown(e.target.value) });
+          }}
+          placeholder="- Point one\n- Point two"
+        />
+      </Field>
+
+      <Field label="My take (Markdown)">
+        <textarea
+          value={myMd}
+          onChange={(e) => {
+            setMyMd(e.target.value);
+            patch({ _myViewMd: e.target.value, myView: parseMarkdown(e.target.value) });
+          }}
+          placeholder="Your clinical/operational take..."
+        />
+      </Field>
+
+      <Field label="Link text">
+        <input value={(d.linkText as string) ?? ""} onChange={(e) => patch({ linkText: e.target.value })} placeholder="Read full article →" />
+      </Field>
+    </>
+  );
+}
+
+function ArticleCardInspector({ a, onPatch, title }: { a: any; onPatch: (p: any) => void; title: string }) {
+  const [md, setMd] = useState((a?._md as string) ?? "");
+  useEffect(() => { setMd((a?._md as string) ?? ""); }, [a?._md]);
+  return (
+    <div className="nf-subcard">
+      <div className="nf-subcard-title">{title}</div>
+      <Field label="Title">
+        <input value={(a?.title as string) ?? ""} onChange={(e) => onPatch({ title: e.target.value })} />
+      </Field>
+      <Field label="Source">
+        <input value={(a?.source as string) ?? ""} onChange={(e) => onPatch({ source: e.target.value })} />
+      </Field>
+      <Field label="URL">
+        <input
+          value={(a?.href as string) ?? ""}
+          onChange={(e) => onPatch({ href: e.target.value })}
+          onBlur={(e) => onPatch({ href: normalizeUrl(e.target.value) })}
+          placeholder="https://..."
+          type="url"
+        />
+      </Field>
+      <Field label="Summary (Markdown)">
+        <textarea
+          value={md}
+          onChange={(e) => {
+            setMd(e.target.value);
+            onPatch({ _md: e.target.value, summary: parseMarkdown(e.target.value) });
+          }}
+        />
+      </Field>
+      <Field label="Link text">
+        <input value={(a?.linkText as string) ?? ""} onChange={(e) => onPatch({ linkText: e.target.value })} placeholder="Read more →" />
+      </Field>
+    </div>
+  );
+}
+
+function ArticlePairInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const left = (d.left as any) ?? {};
+  const right = (d.right as any) ?? {};
+
+  const patchSide = (side: "left" | "right", p: any) => {
+    const cur = (side === "left" ? left : right) || {};
+    patch({ [side]: { ...cur, ...p } });
+  };
+
+  return (
+    <>
+      <ArticleCardInspector a={left} onPatch={(p) => patchSide("left", p)} title="Left Article" />
+      <ArticleCardInspector a={right} onPatch={(p) => patchSide("right", p)} title="Right Article" />
+    </>
+  );
+}
+
+function LinkListInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const title = (d.title as string) ?? "";
+  const raw = Array.isArray(d.items)
+    ? (d.items as any[]).map((it) => {
+        const meta = it.meta ? ` | ${it.meta}` : "";
+        return `${it.label || ""} -> ${it.href || ""}${meta}`.trim();
+      }).join("\n")
+    : "";
+
+  return (
+    <>
+      <Field label="Title (optional)">
+        <input value={title} onChange={(e) => patch({ title: e.target.value })} placeholder="Northwell News / Quick Reads" />
+      </Field>
+      <Field label="Items (one per line: Label -> URL | optional meta)">
+        <textarea
+          value={raw}
+          onChange={(e) => {
+            const items = e.target.value.split("\n").map((line) => {
+              const s = line.trim();
+              if (!s) return null;
+              const parts = s.split("|");
+              const left = parts[0].trim();
+              const meta = parts.slice(1).join("|").trim();
+              const m = left.match(/^(.*?)\s*->\s*(.+)$/);
+              if (!m) return null;
+              return { label: m[1].trim(), href: normalizeUrl(m[2].trim()), meta: meta || "" };
+            }).filter(Boolean);
+            patch({ items });
+          }}
+          placeholder={"Northwell AI Council update -> https://... | Feb 2026\nNew policy memo -> https://..."}
+          style={{ minHeight: 120 }}
+        />
+        <span className="nf-hint">Format: <code>Label -&gt; URL | optional note</code></span>
+      </Field>
+    </>
+  );
+}
+
+function GovernanceInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const [md, setMd] = useState((d._md as string) ?? "");
+  useEffect(() => { setMd((d._md as string) ?? ""); }, [d._md]);
+
+  return (
+    <>
+      <Field label="Badge (optional)">
+        <input value={(d.badge as string) ?? ""} onChange={(e) => patch({ badge: e.target.value })} placeholder="Governance / Legal" />
+      </Field>
+      <Field label="Title">
+        <input value={(d.title as string) ?? ""} onChange={(e) => patch({ title: e.target.value })} placeholder="Regulatory update" />
+      </Field>
+      <Field label="Body (Markdown)">
+        <textarea
+          value={md}
+          onChange={(e) => {
+            setMd(e.target.value);
+            patch({ _md: e.target.value, body: parseMarkdown(e.target.value) });
+          }}
+          placeholder="Short note with links and context."
+        />
+      </Field>
+    </>
+  );
+}
+
+function SbarpInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  // NOTE: React hooks cannot be called conditionally; build sections explicitly below.
+  const [situationMd, setSituationMd] = useState((d._situationMd as string) ?? "");
+  const [backgroundMd, setBackgroundMd] = useState((d._backgroundMd as string) ?? "");
+  const [assessmentMd, setAssessmentMd] = useState((d._assessmentMd as string) ?? "");
+  const [recommendationMd, setRecommendationMd] = useState((d._recommendationMd as string) ?? "");
+  const [promptMd, setPromptMd] = useState((d._promptMd as string) ?? "");
+  useEffect(() => { setSituationMd((d._situationMd as string) ?? ""); }, [d._situationMd]);
+  useEffect(() => { setBackgroundMd((d._backgroundMd as string) ?? ""); }, [d._backgroundMd]);
+  useEffect(() => { setAssessmentMd((d._assessmentMd as string) ?? ""); }, [d._assessmentMd]);
+  useEffect(() => { setRecommendationMd((d._recommendationMd as string) ?? ""); }, [d._recommendationMd]);
+  useEffect(() => { setPromptMd((d._promptMd as string) ?? ""); }, [d._promptMd]);
+
+  return (
+    <>
+      <Field label="Title">
+        <input value={(d.title as string) ?? ""} onChange={(e) => patch({ title: e.target.value })} placeholder="SBAR-P" />
+      </Field>
+
+      <Field label="Situation (Markdown)">
+        <textarea value={situationMd} onChange={(e) => { setSituationMd(e.target.value); patch({ _situationMd: e.target.value, situation: parseMarkdown(e.target.value) }); }} />
+      </Field>
+      <Field label="Background (Markdown)">
+        <textarea value={backgroundMd} onChange={(e) => { setBackgroundMd(e.target.value); patch({ _backgroundMd: e.target.value, background: parseMarkdown(e.target.value) }); }} />
+      </Field>
+      <Field label="Assessment (Markdown)">
+        <textarea value={assessmentMd} onChange={(e) => { setAssessmentMd(e.target.value); patch({ _assessmentMd: e.target.value, assessment: parseMarkdown(e.target.value) }); }} />
+      </Field>
+      <Field label="Recommendation (Markdown)">
+        <textarea value={recommendationMd} onChange={(e) => { setRecommendationMd(e.target.value); patch({ _recommendationMd: e.target.value, recommendation: parseMarkdown(e.target.value) }); }} />
+      </Field>
+      <Field label="Prompt (Markdown)">
+        <textarea value={promptMd} onChange={(e) => { setPromptMd(e.target.value); patch({ _promptMd: e.target.value, prompt: parseMarkdown(e.target.value) }); }} />
+      </Field>
+    </>
+  );
+}
+
+function PromptInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const mk = (key: string, mdKey: string) => {
+    const [md, setMd] = useState((d as any)[mdKey] ?? "");
+    useEffect(() => { setMd((d as any)[mdKey] ?? ""); }, [(d as any)[mdKey]]);
+    return { md, setMd };
+  };
+
+  const t = mk("template","_templateMd");
+  const g = mk("good","_goodMd");
+  const b = mk("bad","_badMd");
+  const tips = mk("tips","_tipsMd");
+
+  return (
+    <>
+      <Field label="Title">
+        <input value={(d.title as string) ?? ""} onChange={(e) => patch({ title: e.target.value })} placeholder="Prompt like a Rockstar" />
+      </Field>
+
+      <Field label="Template (Markdown)">
+        <textarea value={t.md} onChange={(e) => { t.setMd(e.target.value); patch({ _templateMd: e.target.value, template: parseMarkdown(e.target.value) }); }} />
+      </Field>
+
+      <Field label="Good Prompt (Markdown)">
+        <textarea value={g.md} onChange={(e) => { g.setMd(e.target.value); patch({ _goodMd: e.target.value, good: parseMarkdown(e.target.value) }); }} />
+      </Field>
+
+      <Field label="Bad Prompt (Markdown)">
+        <textarea value={b.md} onChange={(e) => { b.setMd(e.target.value); patch({ _badMd: e.target.value, bad: parseMarkdown(e.target.value) }); }} />
+      </Field>
+
+      <Field label="Tips (Markdown)">
+        <textarea value={tips.md} onChange={(e) => { tips.setMd(e.target.value); patch({ _tipsMd: e.target.value, tips: parseMarkdown(e.target.value) }); }} />
+      </Field>
+    </>
+  );
+}
+
+function TermInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const [defMd, setDefMd] = useState((d._definitionMd as string) ?? "");
+  const [whyMd, setWhyMd] = useState((d._whyMd as string) ?? "");
+  useEffect(() => { setDefMd((d._definitionMd as string) ?? ""); }, [d._definitionMd]);
+  useEffect(() => { setWhyMd((d._whyMd as string) ?? ""); }, [d._whyMd]);
+
+  return (
+    <>
+      <Field label="Term">
+        <input value={(d.term as string) ?? ""} onChange={(e) => patch({ term: e.target.value })} placeholder="LLM, RAG, Agent..." />
+      </Field>
+      <Field label="Definition (Markdown)">
+        <textarea value={defMd} onChange={(e) => { setDefMd(e.target.value); patch({ _definitionMd: e.target.value, definition: parseMarkdown(e.target.value) }); }} />
+      </Field>
+      <Field label="Why it matters (Markdown)">
+        <textarea value={whyMd} onChange={(e) => { setWhyMd(e.target.value); patch({ _whyMd: e.target.value, why: parseMarkdown(e.target.value) }); }} />
+      </Field>
+    </>
+  );
+}
+
+function HistoryInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const [md, setMd] = useState((d._md as string) ?? "");
+  useEffect(() => { setMd((d._md as string) ?? ""); }, [d._md]);
+  return (
+    <>
+      <Field label="Title">
+        <input value={(d.title as string) ?? ""} onChange={(e) => patch({ title: e.target.value })} placeholder="AI History" />
+      </Field>
+      <Field label="Body (Markdown)">
+        <textarea value={md} onChange={(e) => { setMd(e.target.value); patch({ _md: e.target.value, body: parseMarkdown(e.target.value) }); }} />
+      </Field>
+    </>
+  );
+}
+
+function HumorInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: Record<string, unknown>) => void }) {
+  const [md, setMd] = useState((d._md as string) ?? "");
+  useEffect(() => { setMd((d._md as string) ?? ""); }, [d._md]);
+  return (
+    <>
+      <Field label="Title">
+        <input value={(d.title as string) ?? ""} onChange={(e) => patch({ title: e.target.value })} placeholder="AI Humor" />
+      </Field>
+      <Field label="Body (Markdown)">
+        <textarea value={md} onChange={(e) => { setMd(e.target.value); patch({ _md: e.target.value, body: parseMarkdown(e.target.value) }); }} />
       </Field>
     </>
   );

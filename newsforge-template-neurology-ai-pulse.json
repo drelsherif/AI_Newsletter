@@ -1,0 +1,617 @@
+{
+  "schemaVersion": 4,
+  "meta": {
+    "title": "Neurology AI Pulse",
+    "issueNumber": "003",
+    "dateISO": "2026-03-01",
+    "editors": [
+      "Dr. Yasir El-Sherif",
+      "Dr. Jai Shahani"
+    ],
+    "orgName": "Department of Neurology",
+    "department": "Staten Island University Hospital · Northwell Health",
+    "contactEmail": "yelsherif@northwell.edu",
+    "disclaimer": "© 2026 Neurology AI Pulse. Clinical AI · Governance · Practical Insight. This newsletter is intended for healthcare professionals. Content does not constitute medical advice."
+  },
+  "brand": {
+    "logoMode": "html",
+    "logoText": "NEUROLOGY AI PULSE",
+    "logoHtml": "<div style=\"display:flex;align-items:center;gap:10px\"><div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#4F7FFF,#7C3AED);display:flex;align-items:center;justify-content:center;flex-shrink:0\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"white\" stroke-width=\"2.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><ellipse cx=\"12\" cy=\"5\" rx=\"9\" ry=\"3\"/><path d=\"M3 5v6c0 1.66 4.03 3 9 3s9-1.34 9-3V5\"/><path d=\"M3 11v6c0 1.66 4.03 3 9 3s9-1.34 9-3v-6\"/></svg></div><div><div style=\"font-family:Arial,sans-serif;font-size:16px;font-weight:800;color:#ffffff;letter-spacing:-0.4px;line-height:1.1\">NEUROLOGY AI PULSE</div><div style=\"font-family:Arial,sans-serif;font-size:10px;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-top:2px\">Clinical AI · Governance · Insight</div></div></div>",
+    "primaryColor": "#4F7FFF",
+    "accentColor": "#7C3AED",
+    "footerLinks": [
+      {
+        "label": "Archive",
+        "href": "https://pulse.globalai-medicine.org"
+      },
+      {
+        "label": "Editorial Standards",
+        "href": "https://pulse.globalai-medicine.org/editorial-standards.html"
+      },
+      {
+        "label": "Unsubscribe",
+        "href": "mailto:yelsherif@northwell.edu?subject=Unsubscribe"
+      }
+    ]
+  },
+  "theme": {
+    "fonts": [
+      {
+        "role": "body",
+        "family": "Lora",
+        "fallbacks": [
+          "Georgia",
+          "serif"
+        ]
+      },
+      {
+        "role": "heading",
+        "family": "Syne",
+        "fallbacks": [
+          "system-ui",
+          "sans-serif"
+        ]
+      },
+      {
+        "role": "mono",
+        "family": "JetBrains Mono",
+        "fallbacks": [
+          "ui-monospace",
+          "monospace"
+        ]
+      }
+    ],
+    "maxWidthPx": 680,
+    "radiusPx": 12,
+    "bg": "#ffffff",
+    "panel": "rgba(0,0,0,0.03)",
+    "text": "#1a1a2e",
+    "muted": "#6b7280"
+  },
+  "assets": [],
+  "feeds": [],
+  "sections": [
+    {
+      "id": "sec-ticker",
+      "title": "",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-ticker",
+          "type": "ticker",
+          "label": "Headlines Ticker",
+          "data": {
+            "items": "FDA clears first AI stroke triage system • LLM matches neurologist on MMSE scoring • EU AI Act Article 22 now applies to clinical decision support • NIH awards $42M for AI epilepsy detection network • Blood biomarker panel enters Alzheimer's guidelines"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-spotlight",
+      "title": "This Month's Spotlight",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-spotlight",
+          "type": "article",
+          "label": "Feature Article",
+          "data": {
+            "title": "Large Language Models in Neurology Clinics: A 12-Month Real-World Audit",
+            "source": "Nature Medicine · February 2026",
+            "href": "https://www.nature.com/nm",
+            "summary": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "A landmark prospective cohort study across 14 academic neurology centers examined real-world LLM deployment over 12 months — 38,000 patient encounters. The headline finding: AI-assisted documentation reduced attending note time by "
+                  },
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "41%"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": " while improving completeness scores by 23%, as rated by blinded quality reviewers."
+                  }
+                ]
+              },
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "Three failure modes unique to neurology were identified: hallucination of prior stroke history in patients with white matter changes; over-confidence in early FND vs MS differentiation; and systematic underweighting of non-English symptom descriptors. Authors recommend a "
+                  },
+                  {
+                    "t": "i",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "neurology-specific calibration layer"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": " before deploying any general-purpose LLM in clinical workflows."
+                  }
+                ]
+              }
+            ],
+            "_md": "A landmark prospective cohort study...",
+            "linkText": "Read the full study →"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-div1",
+      "title": "",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-div1",
+          "type": "divider",
+          "label": "Divider",
+          "data": {
+            "style": "dots"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-clinical",
+      "title": "Clinical AI Updates",
+      "layout": "twoColumn",
+      "blocks": [
+        {
+          "id": "blk-clin1",
+          "type": "article",
+          "label": "EEG AI",
+          "data": {
+            "title": "AI EEG Cuts Time-to-Treatment in Status Epilepticus",
+            "source": "Epilepsia · Jan 2026",
+            "href": "https://onlinelibrary.wiley.com/journal/15281167",
+            "summary": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "A multicenter RCT showed AI-assisted EEG interpretation reduced median time-to-diagnosis in non-convulsive status epilepticus from 38 to "
+                  },
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "11 minutes"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": ", with sensitivity of 94.2% vs 78.1% for on-call physicians."
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "linkText": "Read more →"
+          }
+        },
+        {
+          "id": "blk-clin2",
+          "type": "article",
+          "label": "Parkinson's Gait",
+          "data": {
+            "title": "Smartphone Gait Analysis Detects Parkinson's 18 Months Earlier",
+            "source": "NEJM Digital Medicine · Feb 2026",
+            "href": "https://www.nejm.org",
+            "summary": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "Passive smartphone accelerometry in 2,200 prodromal Parkinson's patients detected motor progression "
+                  },
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "18 months earlier"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": " than standard clinical assessments, opening a critical window for neuroprotective trials."
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "linkText": "Read more →"
+          }
+        },
+        {
+          "id": "blk-clin3",
+          "type": "article",
+          "label": "Stroke Imaging",
+          "data": {
+            "title": "Vision Transformer Outperforms Radiologists in LVO Detection",
+            "source": "Stroke · Feb 2026",
+            "href": "https://www.ahajournals.org/journal/str",
+            "summary": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "On 4,100 held-out CTA scans, the model achieved AUC "
+                  },
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "0.971"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": " vs 0.934 for experienced neuroradiologists, with processing time under 90 seconds per scan."
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "linkText": "Read more →"
+          }
+        },
+        {
+          "id": "blk-clin4",
+          "type": "article",
+          "label": "MS Fatigue Monitor",
+          "data": {
+            "title": "Wearable AI Fatigue Scoring Validated in Relapsing-Remitting MS",
+            "source": "Multiple Sclerosis Journal · Jan 2026",
+            "href": "https://journals.sagepub.com/home/msj",
+            "summary": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "A wrist-worn AI fatigue score correlated "
+                  },
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "r=0.81"
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": " with MFIS scores over 6 months, suggesting passive monitoring could replace burdensome weekly questionnaires in clinical trials."
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "linkText": "Read more →"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-governance",
+      "title": "Governance & Legal",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-gov-alert",
+          "type": "html",
+          "label": "Regulatory Alert",
+          "data": {
+            "label": "Regulatory Alert",
+            "html": "<div style=\"padding:18px 22px;background:linear-gradient(135deg,rgba(124,58,237,0.07),rgba(79,127,255,0.07));border:1px solid rgba(124,58,237,0.2);border-left:4px solid #7C3AED;border-radius:10px;font-family:Arial,sans-serif;margin-bottom:0\"><div style=\"font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#7C3AED;margin-bottom:7px\">⚖️ Regulatory Update — Effective March 2026</div><div style=\"font-size:15px;font-weight:700;color:#1a1a2e;margin-bottom:7px;font-family:Georgia,serif;line-height:1.3\">EU AI Act Article 22 Now Applies to Clinical Decision Support</div><div style=\"font-size:13px;color:#4b5563;line-height:1.65\">All AI systems providing clinical recommendations in EU member states must now maintain a human oversight log, publish model cards, and register in the EU AI Registry. Neurologists using off-label AI tools should review institutional compliance timelines immediately. <strong style=\"color:#1a1a2e\">Penalties: up to €30M or 6% of global annual revenue.</strong></div></div>"
+          }
+        },
+        {
+          "id": "blk-gov-fda",
+          "type": "article",
+          "label": "FDA Breakthrough",
+          "data": {
+            "title": "FDA Grants Breakthrough Designation to AI Migraine Prediction Platform",
+            "source": "FDA.gov · February 2026",
+            "href": "https://www.fda.gov",
+            "summary": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "NeuraPredict's passive migraine forecasting platform — analyzing sleep, HRV, and environmental sensors — received Breakthrough Designation, signaling accelerated 510(k) review. The platform predicted episodic migraine onset with 72-hour lead time and 84% sensitivity in a 900-patient validation study."
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "linkText": "View FDA announcement →"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-div2",
+      "title": "",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-div2",
+          "type": "divider",
+          "label": "Divider",
+          "data": {
+            "style": "line"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-tools",
+      "title": "Tools & Generative AI",
+      "layout": "twoColumn",
+      "blocks": [
+        {
+          "id": "blk-prompts",
+          "type": "text",
+          "label": "Prompt Guide",
+          "data": {
+            "heading": "🧠 3 Validated Prompts for Neurology Residents",
+            "body": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "txt",
+                    "v": "Tested by our editorial team across GPT-4o and Claude 3.5 in supervised clinical settings:"
+                  }
+                ]
+              },
+              {
+                "t": "ul",
+                "items": [
+                  {
+                    "t": "p",
+                    "c": [
+                      {
+                        "t": "b",
+                        "c": [
+                          {
+                            "t": "txt",
+                            "v": "Discharge Summary: "
+                          }
+                        ]
+                      },
+                      {
+                        "t": "txt",
+                        "v": "\"Summarize this admission for [dx]. Include: 1-line summary, key decisions, pending results, and 3 follow-up actions for the outpatient team.\""
+                      }
+                    ]
+                  },
+                  {
+                    "t": "p",
+                    "c": [
+                      {
+                        "t": "b",
+                        "c": [
+                          {
+                            "t": "txt",
+                            "v": "Literature DDx: "
+                          }
+                        ]
+                      },
+                      {
+                        "t": "txt",
+                        "v": "\"Summarize current evidence for [treatment] in [condition], highlight level of evidence, and flag ongoing phase 3 trials.\""
+                      }
+                    ]
+                  },
+                  {
+                    "t": "p",
+                    "c": [
+                      {
+                        "t": "b",
+                        "c": [
+                          {
+                            "t": "txt",
+                            "v": "DDx Builder: "
+                          }
+                        ]
+                      },
+                      {
+                        "t": "txt",
+                        "v": "\"Generate a differential for a 42yo with [symptoms]. Rank by likelihood, list one distinguishing feature per diagnosis.\""
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "links": [
+              {
+                "label": "Full prompt library →",
+                "href": "https://pulse.globalai-medicine.org"
+              }
+            ]
+          }
+        },
+        {
+          "id": "blk-radar",
+          "type": "text",
+          "label": "Tool Radar",
+          "data": {
+            "heading": "📡 Tool Radar: March 2026",
+            "body": [
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "Suki AI 4.0 "
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": "— Ambient documentation now supports ICD-11 coding with neurology-specific vocabulary. Auto-flags cognitive screening gaps."
+                  }
+                ]
+              },
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "Glass Health "
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": "— Updated DDx engine includes rare neuro-genetic conditions. Free tier for academic institutions."
+                  }
+                ]
+              },
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "Nabla Copilot "
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": "— EU-compliant ambient scribe, multilingual consent support, GDPR Article 22 compliant documentation trail."
+                  }
+                ]
+              },
+              {
+                "t": "p",
+                "c": [
+                  {
+                    "t": "b",
+                    "c": [
+                      {
+                        "t": "txt",
+                        "v": "MedPaLM 3 "
+                      }
+                    ]
+                  },
+                  {
+                    "t": "txt",
+                    "v": "— Google's latest clinical LLM achieves expert-level performance on neurology board exam questions (91st percentile)."
+                  }
+                ]
+              }
+            ],
+            "_md": "",
+            "links": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-editorial",
+      "title": "Editor's Note",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-editorial",
+          "type": "html",
+          "label": "Editor's Note",
+          "data": {
+            "label": "Editorial",
+            "html": "<div style=\"padding:24px 28px;background:#fafafa;border-radius:12px;border:1px solid #efefef;position:relative;overflow:hidden\"><div style=\"position:absolute;top:14px;left:18px;font-size:64px;color:#f0f0f0;font-family:Georgia,serif;line-height:1;pointer-events:none;user-select:none\">“</div><div style=\"padding-left:36px\"><p style=\"font-family:Georgia,'Times New Roman',serif;font-size:15px;font-style:italic;color:#374151;line-height:1.8;margin:0 0 16px 0\">The question we are asked most often by residents is not <em>which</em> AI tool to use — it is how to know when to trust it. The answer has not changed from how we teach clinical reasoning: understand the prior probability, know the model’s failure modes, and always maintain the cognitive independence to disagree. AI is a second opinion, not a verdict.</p><div style=\"display:flex;align-items:center;gap:12px;padding-top:14px;border-top:1px solid #e5e7eb\"><div style=\"width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#4F7FFF,#7C3AED);display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-family:Arial,sans-serif;font-size:13px;flex-shrink:0\">YE</div><div><div style=\"font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#1a1a2e;margin-bottom:2px\">Dr. Yasir El-Sherif, MD PhD</div><div style=\"font-family:Arial,sans-serif;font-size:11px;color:#9ca3af\">Editor-in-Chief · Neurology AI Pulse</div></div></div></div></div>"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-cta",
+      "title": "",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-spacer1",
+          "type": "spacer",
+          "label": "Spacer",
+          "data": {
+            "height": 6
+          }
+        },
+        {
+          "id": "blk-cta",
+          "type": "button",
+          "label": "Archive CTA",
+          "data": {
+            "text": "Browse All Issues at pulse.globalai-medicine.org",
+            "href": "https://pulse.globalai-medicine.org",
+            "color": "#4F7FFF",
+            "textColor": "#ffffff",
+            "align": "center"
+          }
+        },
+        {
+          "id": "blk-spacer2",
+          "type": "spacer",
+          "label": "Spacer",
+          "data": {
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "id": "sec-next",
+      "title": "Coming Next Issue",
+      "layout": "single",
+      "blocks": [
+        {
+          "id": "blk-next",
+          "type": "ticker",
+          "label": "Next Issue Preview",
+          "data": {
+            "items": "Deep Dive: Cognitive Rights & Brain Data Ownership • Review: AI in Neuro-Oncology Surveillance • Interview: Chief AI Officer at Cleveland Clinic • Tool Showdown: Ambient Scribes Head-to-Head"
+          }
+        }
+      ]
+    }
+  ]
+}

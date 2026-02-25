@@ -44,7 +44,145 @@ function renderBlockEmail(bl: Block, issue: Issue, primary: string): string {
     </div>`;
   }
 
-  if (bl.type === "ticker") {
+  
+  if (bl.type === "spotlight") {
+    const href = normalizeUrl((d.href as string) || "");
+    const take = Array.isArray(d.takeaways) ? richTextToEmailHtml(d.takeaways as any) : "";
+    const my = Array.isArray(d.myView) ? richTextToEmailHtml(d.myView as any) : "";
+    const img = (d.imageSrc as string) || "";
+    const badge = esc((d.badge as string) || "Spotlight");
+    const title = esc((d.title as string) || "Spotlight");
+    const source = esc((d.source as string) || "");
+    const kicker = esc((d.kicker as string) || "");
+    const titleHtml = href
+      ? `<a href="${esc(href)}" style="color:#111827;text-decoration:none;font-size:18px;font-weight:800;line-height:1.25;font-family:Georgia,serif">${title}</a>`
+      : `<div style="color:#111827;font-size:18px;font-weight:800;line-height:1.25;font-family:Georgia,serif">${title}</div>`;
+    const imgHtml = img
+      ? `<div style="margin-top:12px"><img src="${esc(img)}" alt="${esc((d.imageAlt as string) || "")}" style="width:100%;border-radius:10px;display:block" /></div>`
+      : "";
+    return `<div style="padding:20px;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:12px;background:#fff">
+      <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:${esc(primary)}">${badge}</div>
+      ${kicker ? `<div style="margin-top:6px;font-family:Arial,sans-serif;font-size:12px;color:#6b7280">${kicker}</div>` : ""}
+      <div style="margin-top:8px">${titleHtml}</div>
+      ${source ? `<div style="margin-top:6px;font-family:Arial,sans-serif;font-size:11px;color:#9ca3af">${source}</div>` : ""}
+      ${imgHtml}
+      ${take ? `<div style="margin-top:14px"><div style="font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:#111827;margin-bottom:6px">Why it matters</div><div style="font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${take}</div></div>` : ""}
+      ${my ? `<div style="margin-top:14px"><div style="font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:#111827;margin-bottom:6px">My take</div><div style="font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${my}</div></div>` : ""}
+      ${href ? `<a href="${esc(href)}" style="display:inline-block;margin-top:14px;font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:${esc(primary)};text-decoration:none">${esc((d.linkText as string) || "Read full article →")}</a>` : ""}
+    </div>`;
+  }
+
+  if (bl.type === "articlePair") {
+    const L = (d.left as any) || {};
+    const R = (d.right as any) || {};
+    const renderCard = (a: any) => {
+      const href = normalizeUrl(a.href || "");
+      const summary = Array.isArray(a.summary) ? richTextToEmailHtml(a.summary as any) : "";
+      const title = esc(a.title || "Article");
+      const src = esc(a.source || "");
+      const titleHtml = href
+        ? `<a href="${esc(href)}" style="color:#111827;text-decoration:none;font-size:15px;font-weight:800;line-height:1.3;font-family:Georgia,serif">${title}</a>`
+        : `<div style="color:#111827;font-size:15px;font-weight:800;line-height:1.3;font-family:Georgia,serif">${title}</div>`;
+      return `<div style="padding:14px;border:1px solid #e5e7eb;border-radius:10px;background:#fff">
+        ${src ? `<div style="font-family:Arial,sans-serif;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;color:#9ca3af;margin-bottom:6px">${src}</div>` : ""}
+        <div style="margin-bottom:8px">${titleHtml}</div>
+        ${summary ? `<div style="font-size:13px;line-height:1.6;color:#4b5563;font-family:Georgia,serif">${summary}</div>` : ""}
+        ${href ? `<a href="${esc(href)}" style="display:inline-block;margin-top:10px;font-family:Arial,sans-serif;font-size:12px;font-weight:800;color:${esc(primary)};text-decoration:none">${esc(a.linkText || "Read more →")}</a>` : ""}
+      </div>`;
+    };
+
+    return `<table role="presentation" cellspacing="0" cellpadding="0" style="width:100%;margin-bottom:12px"><tr>
+      <td style="width:50%;padding-right:6px;vertical-align:top">${renderCard(L)}</td>
+      <td style="width:50%;padding-left:6px;vertical-align:top">${renderCard(R)}</td>
+    </tr></table>`;
+  }
+
+  if (bl.type === "linkList") {
+    const title = esc((d.title as string) || "");
+    const items = Array.isArray(d.items) ? (d.items as any[]) : [];
+    const rows = items.map((it) => {
+      const href = normalizeUrl(it.href || "");
+      const label = esc(it.label || href || "");
+      const meta = esc(it.meta || "");
+      const a = href ? `<a href="${esc(href)}" style="color:${esc(primary)};text-decoration:none;font-weight:800">${label}</a>` : `<span style="font-weight:800">${label}</span>`;
+      return `<div style="margin:0 0 8px 0;font-family:Arial,sans-serif;font-size:13px;color:#374151">${a}${meta ? ` <span style="color:#9ca3af;font-weight:600">— ${meta}</span>` : ""}</div>`;
+    }).join("");
+    return `<div style="padding:16px 18px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
+      ${title ? `<div style="font-family:Arial,sans-serif;font-size:12px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#111827;margin-bottom:10px">${title}</div>` : ""}
+      ${rows || `<div style="font-family:Arial,sans-serif;font-size:13px;color:#6b7280">No links yet.</div>`}
+    </div>`;
+  }
+
+  if (bl.type === "governance") {
+    const body = Array.isArray(d.body) ? richTextToEmailHtml(d.body as any) : "";
+    return `<div style="padding:18px 20px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
+      <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:${esc(primary)}">${esc((d.badge as string) || "Governance / Legal")}</div>
+      <div style="margin-top:8px;font-family:Georgia,serif;font-size:16px;font-weight:800;color:#111827">${esc((d.title as string) || "")}</div>
+      ${body ? `<div style="margin-top:10px;font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${body}</div>` : ""}
+    </div>`;
+  }
+
+  if (bl.type === "sbarp") {
+    const row = (label: string, v: any) => {
+      const html = Array.isArray(v) ? richTextToEmailHtml(v as any) : "";
+      if (!html) return "";
+      return `<div style="margin-top:10px">
+        <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#6b7280">${esc(label)}</div>
+        <div style="font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${html}</div>
+      </div>`;
+    };
+    return `<div style="padding:18px 20px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
+      <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:#111827">${esc((d.title as string) || "SBAR-P")}</div>
+      ${row("Situation", d.situation)}
+      ${row("Background", d.background)}
+      ${row("Assessment", d.assessment)}
+      ${row("Recommendation", d.recommendation)}
+      ${row("Prompt", d.prompt)}
+    </div>`;
+  }
+
+  if (bl.type === "prompt") {
+    const sec = (label: string, v: any) => {
+      const html = Array.isArray(v) ? richTextToEmailHtml(v as any) : "";
+      if (!html) return "";
+      return `<div style="margin-top:10px">
+        <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#6b7280">${esc(label)}</div>
+        <div style="font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${html}</div>
+      </div>`;
+    };
+    return `<div style="padding:18px 20px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
+      <div style="font-family:Arial,sans-serif;font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:${esc(primary)}">Prompt</div>
+      <div style="margin-top:8px;font-family:Georgia,serif;font-size:16px;font-weight:800;color:#111827">${esc((d.title as string) || "Prompt")}</div>
+      ${sec("Template", d.template)}
+      ${sec("Good prompt", d.good)}
+      ${sec("Bad prompt", d.bad)}
+      ${sec("Tips", d.tips)}
+    </div>`;
+  }
+
+  if (bl.type === "term") {
+    const def = Array.isArray(d.definition) ? richTextToEmailHtml(d.definition as any) : "";
+    const why = Array.isArray(d.why) ? richTextToEmailHtml(d.why as any) : "";
+    return `<div style="padding:18px 20px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
+      <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:${esc(primary)}">AI Term</div>
+      <div style="margin-top:6px;font-family:Georgia,serif;font-size:18px;font-weight:900;color:#111827">${esc((d.term as string) || "")}</div>
+      ${def ? `<div style="margin-top:10px;font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${def}</div>` : ""}
+      ${why ? `<div style="margin-top:12px"><div style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;letter-spacing:1.2px;text-transform:uppercase;color:#6b7280">Why it matters</div><div style="font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${why}</div></div>` : ""}
+    </div>`;
+  }
+
+  if (bl.type === "history" || bl.type === "humor") {
+    const body = Array.isArray(d.body) ? richTextToEmailHtml(d.body as any) : "";
+    const title = esc((d.title as string) || (bl.type === "history" ? "AI History" : "AI Humor"));
+    const badge = bl.type === "history" ? "History" : "Humor";
+    return `<div style="padding:18px 20px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
+      <div style="font-family:Arial,sans-serif;font-size:11px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase;color:${esc(primary)}">${badge}</div>
+      <div style="margin-top:8px;font-family:Georgia,serif;font-size:16px;font-weight:800;color:#111827">${title}</div>
+      ${body ? `<div style="margin-top:10px;font-size:14px;line-height:1.65;color:#374151;font-family:Georgia,serif">${body}</div>` : ""}
+    </div>`;
+  }
+
+if (bl.type === "ticker") {
     let items: string[] = [];
     if (Array.isArray(d.items)) items = (d.items as unknown[]).map(String);
     else if (typeof d.items === "string") items = d.items.split("•").map((x:string) => x.trim()).filter(Boolean);
