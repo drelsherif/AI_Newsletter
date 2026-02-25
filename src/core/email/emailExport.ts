@@ -1,5 +1,6 @@
 import type { Issue, Block } from "../issue/schema";
 import { richTextToEmailHtml } from "../richtext/toEmailHtml";
+import { normalizeUrl } from "../utils/normalizeUrl";
 
 function esc(s: string): string {
   return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -31,14 +32,15 @@ function renderBlockEmail(bl: Block, issue: Issue, primary: string): string {
 
   if (bl.type === "article") {
     const summary = Array.isArray(d.summary) ? richTextToEmailHtml(d.summary as any) : "";
-    const titleHtml = d.href
-      ? `<a href="${esc(d.href as string)}" style="color:#1a1a2e;text-decoration:none;font-size:17px;font-weight:700;line-height:1.3;font-family:Georgia,serif">${esc(d.title as string ?? "")}</a>`
+    const href = normalizeUrl((d.href as string) || "");
+    const titleHtml = href
+      ? `<a href="${esc(href)}" style="color:#1a1a2e;text-decoration:none;font-size:17px;font-weight:700;line-height:1.3;font-family:Georgia,serif">${esc(d.title as string ?? "")}</a>`
       : `<span style="font-size:17px;font-weight:700;line-height:1.3;color:#1a1a2e;font-family:Georgia,serif">${esc(d.title as string ?? "")}</span>`;
     return `<div style="padding:18px 20px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fff">
       ${d.source ? `<div style="font-family:Arial,sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#9ca3af;margin-bottom:6px">${esc(d.source as string)}</div>` : ""}
       <div style="margin-bottom:10px">${titleHtml}</div>
       ${summary ? `<div style="font-size:14px;line-height:1.65;color:#4b5563;font-family:Georgia,serif">${summary}</div>` : ""}
-      ${d.href ? `<a href="${esc(d.href as string)}" style="display:inline-block;margin-top:12px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:${esc(primary)};text-decoration:none">${esc((d.linkText as string) || "Read more →")}</a>` : ""}
+      ${href ? `<a href="${esc(href)}" style="display:inline-block;margin-top:12px;font-family:Arial,sans-serif;font-size:12px;font-weight:700;color:${esc(primary)};text-decoration:none">${esc((d.linkText as string) || "Read more →")}</a>` : ""}
     </div>`;
   }
 
@@ -92,8 +94,9 @@ function renderBlockEmail(bl: Block, issue: Issue, primary: string): string {
   }
 
   if (bl.type === "button") {
+    const btnHref = normalizeUrl((d.href as string) || "");
     return `<div style="text-align:${esc((d.align as string) || "center")};padding:12px 0;margin-bottom:12px">
-      <a href="${esc((d.href as string) || "#")}" style="display:inline-block;padding:13px 28px;border-radius:99px;background:${esc((d.color as string) || primary)};color:${esc((d.textColor as string) || "#fff")};font-family:Arial,sans-serif;font-size:13px;font-weight:700;text-decoration:none;letter-spacing:0.3px">${esc((d.text as string) || "Click Here")}</a>
+      <a href="${esc(btnHref || "#")}" style="display:inline-block;padding:13px 28px;border-radius:99px;background:${esc((d.color as string) || primary)};color:${esc((d.textColor as string) || "#fff")};font-family:Arial,sans-serif;font-size:13px;font-weight:700;text-decoration:none;letter-spacing:0.3px">${esc((d.text as string) || "Click Here")}</a>
     </div>`;
   }
 
@@ -104,9 +107,10 @@ function renderBlockEmail(bl: Block, issue: Issue, primary: string): string {
   if (bl.type === "image") {
     const src = (d.src as string) || "";
     if (!src) return "";
+    const imgHref = normalizeUrl((d.href as string) || "");
     const imgTag = `<img src="${esc(src)}" alt="${esc((d.alt as string) || "")}" style="width:100%;border-radius:10px;display:block;max-width:100%" />`;
-    const wrapped = d.href
-      ? `<a href="${esc(d.href as string)}" style="display:block;text-decoration:none">${imgTag}</a>`
+    const wrapped = imgHref
+      ? `<a href="${esc(imgHref)}" style="display:block;text-decoration:none">${imgTag}</a>`
       : imgTag;
     const caption = Array.isArray(d.caption) ? richTextToEmailHtml(d.caption as any) : "";
     return `<div style="margin-bottom:12px">

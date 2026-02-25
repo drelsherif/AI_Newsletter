@@ -28,7 +28,8 @@ import {
 import { blockRegistry } from "../../renderer/blocks/registry";
 import { parseMarkdown } from "../../core/richtext/parseMarkdown";
 import { issueToEmailHtml } from "../../core/email/emailExport";
-import { readImageFile, formatBytes } from "../../core/assets/imageUpload";
+import { readImageFile } from "../../core/assets/imageUpload";
+import { normalizeUrl } from "../../core/utils/normalizeUrl";
 import {
   fetchFeed,
   fetchAllFeeds,
@@ -1215,6 +1216,7 @@ function BlockRow({
   return (
     <div
       className={`nf-block-row${isSelected ? " selected" : ""}`}
+      data-type={block.type}
       onClick={onSelect}
     >
       <span className={`nf-block-badge nf-badge-${block.type}`}>
@@ -1582,7 +1584,8 @@ function ArticleInspector({ d, patch }: { d: Record<string, unknown>; patch: (p:
         <input
           value={(d.href as string) ?? ""}
           onChange={(e) => patch({ href: e.target.value })}
-          placeholder="https://example.com/article"
+          onBlur={(e) => patch({ href: normalizeUrl(e.target.value) })}
+          placeholder="https://example.com/article or www.example.com"
           type="url"
         />
       </Field>
@@ -1699,7 +1702,8 @@ function ImageInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: R
         <input
           value={(d.href as string) ?? ""}
           onChange={(e) => patch({ href: e.target.value })}
-          placeholder="https://example.com"
+          onBlur={(e) => patch({ href: normalizeUrl(e.target.value) })}
+          placeholder="https://example.com or www.example.com"
           type="url"
         />
       </Field>
@@ -1792,7 +1796,8 @@ function ButtonInspector({ d, patch }: { d: Record<string, unknown>; patch: (p: 
         <input
           value={(d.href as string) ?? ""}
           onChange={(e) => patch({ href: e.target.value })}
-          placeholder="https://example.com"
+          onBlur={(e) => patch({ href: normalizeUrl(e.target.value) })}
+          placeholder="https://example.com or www.example.com"
           type="url"
         />
       </Field>
