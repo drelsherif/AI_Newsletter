@@ -1,0 +1,9 @@
+node_modules/
+dist/
+export_web/
+export_web.zip
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local
