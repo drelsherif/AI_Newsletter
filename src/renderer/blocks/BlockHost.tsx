@@ -4,10 +4,11 @@ import type { RenderMode } from "../modes";
 import { blockRegistry } from "./registry";
 
 export function BlockHost({ block, mode }: { block: Block; mode: RenderMode }) {
-  const def = blockRegistry[block.type];
-  if (!def) return <div className="blk">Unknown block type: {block.type}</div>;
-  if (mode === "email" && !def.emailSafe) {
-    return <div className="blk blk-warn">This block type (“{def.title}”) is not email-safe. Consider replacing for email export.</div>;
+  const def = blockRegistry[block.type as Block["type"]];
+  if (!def) {
+    return (
+      <div className="blk-warn">Unknown block type: {block.type}</div>
+    );
   }
   return <def.Render block={block} mode={mode} />;
 }

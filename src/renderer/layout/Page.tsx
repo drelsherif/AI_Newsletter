@@ -3,10 +3,11 @@ import type { Issue } from "../../core/issue/schema";
 import type { RenderMode } from "../modes";
 
 export function Page({ issue, mode, children }: { issue: Issue; mode: RenderMode; children: React.ReactNode }) {
-  const email = mode === "email";
   return (
-    <div className={email ? "page email" : "page"}>
-      <div className="page-inner">{children}</div>
+    <div className={`nl-page${mode === "email" ? " nl-page-email" : ""}`}>
+      <div className="nl-page-inner" style={{ maxWidth: `${issue.theme.maxWidthPx}px` }}>
+        {children}
+      </div>
     </div>
   );
 }

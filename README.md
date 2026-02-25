@@ -1,46 +1,91 @@
-# Newsletter Builder vNext (Scaffold v0.2)
+# NewsForge
 
-This scaffold is designed so **fonts, portable rich text, and assets** are first-class and *export-safe*.
+> Free, open-source newsletter builder — runs entirely in your browser.
 
-## Quick start (Windows CMD)
-```bat
-cd C:\NAP_VNEXT
+**Live demo:** [your-github-username.github.io/newsforge](https://your-github-username.github.io/newsforge)
+
+---
+
+## Features
+
+- **8 block types** — Text (Markdown), Article, Ticker, Image, HTML, Button, Divider, Spacer
+- **Full HTML block** — write raw HTML with a custom friendly label
+- **URL links** — Markdown `[Label](url)` links in text blocks, footer links in branding
+- **Newsletter library** — save and load multiple newsletters from browser storage
+- **3-column layouts** — single, 2-column, and 3-column section layouts
+- **Email HTML export** — clean, client-compatible HTML ready for any ESP
+- **JSON export/import** — portable newsletter format
+- **Undo/Redo** — full history with Ctrl+Z / Ctrl+Y
+- **Responsive preview** — mobile / tablet / desktop viewport switching
+- **No accounts, no backend, no fees**
+
+---
+
+## Development
+
+```bash
 npm install
 npm run dev
 ```
 
 ## Build
-```bat
+
+```bash
 npm run build
-npm run preview
 ```
 
-## GH Pages deploy
-1) Create a new GitHub repo, e.g. `NAP_News_VNEXT`
-2) In Windows CMD:
-```bat
-set VITE_BASE=/NAP_News_VNEXT/
-npm run build
-npm run deploy
+## Deploy to GitHub Pages
+
+### One-time setup
+
+1. Go to your repo on GitHub → **Settings** → **Pages**
+2. Under **Source**, select **GitHub Actions**
+3. Go to **Settings** → **Secrets and variables** → **Actions** → **Variables** → **New repository variable**
+   - Name: `VITE_BASE`
+   - Value: `/your-repo-name/` (e.g. `/newsforge/`)
+
+### Deploy
+
+Push to `main` — GitHub Actions will automatically build and deploy.
+
+The workflow file is at `.github/workflows/deploy.yml`.
+
+---
+
+## Architecture
+
+```
+src/
+├── core/
+│   ├── email/          # Email HTML export
+│   ├── issue/          # Schema (Zod), defaults, migrate, normalize, validate
+│   ├── richtext/       # Portable RichText AST: parse, render React, render Email
+│   ├── storage/        # Library (multi-newsletter localStorage), undo stack
+│   └── theme/          # CSS variable tokens
+├── renderer/
+│   ├── blocks/         # Block registry + 8 block type components
+│   └── layout/         # Header, Footer, Page, SectionFrame
+├── shared/             # IssueContext, useIssueAsset
+└── ui/
+    ├── pages/          # Builder, Home, Viewer
+    └── styles.css      # All styles
 ```
 
-## Exports
-### Export JSON (from Builder)
-- Click **Export JSON** → downloads `newsletter.json`
+### Adding a new block type
 
-### Export Email HTML (from Builder)
-- Click **Export Email HTML** → downloads `newsletter_email.html`
+1. Add the type to `BlockSchema` enum in `src/core/issue/schema.ts`
+2. Create `src/renderer/blocks/types/YourBlock.tsx`
+3. Register it in `src/renderer/blocks/registry.ts`
+4. Add default data in `BLOCK_DEFAULTS` in `Builder.tsx`
+5. Add an inspector component in `Builder.tsx`
+6. Handle it in `src/core/email/emailExport.ts`
 
-### Export web bundle (zip)
-This copies `dist/` + `newsletter.json` + `public/assets` into `export_web/` and creates `export_web.zip`:
-```bat
-npm run build
-npm run export:web:zip
-```
+---
 
-Then you can host `export_web/` on any static server (or unzip on a host).
+## Contributing
 
-## Data model
-- `theme.fonts[]` uses `FontSpec` so you can later switch between Google and local `@font-face`.
-- Rich text is stored as a neutral AST (portable) so Web/Email/PDF can share the same content.
-- `assets[]` provides an asset manifest; blocks reference assets by `assetId`.
+Issues and PRs welcome! This project is designed to grow — new block types, themes, and export formats are all good directions.
+
+## License
+
+MIT

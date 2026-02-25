@@ -4,16 +4,20 @@ import type { RenderMode } from "../../modes";
 
 export function TickerBlock({ block }: { block: Block; mode: RenderMode }) {
   const d = block.data as any;
-  const items: string[] = Array.isArray(d.items) ? d.items.map(String) : [];
+  // Support both array format (old) and string format (new, bullet-separated)
+  let items: string[] = [];
+  if (Array.isArray(d.items)) {
+    items = d.items.map(String);
+  } else if (typeof d.items === "string") {
+    items = d.items.split("•").map((x: string) => x.trim()).filter(Boolean);
+  }
+
   return (
-    <div className="blk ticker">
-      <div className="ticker-row">
-        <span className="pill">Ticker</span>
-        <div className="ticker-items">
-          {items.map((x, i) => (
-            <span key={i} className="ticker-item">{x}</span>
-          ))}
-        </div>
+    <div className="blk blk-ticker">
+      <div className="ticker-inner">
+        {items.map((x, i) => (
+          <span key={i} className="ticker-pill">{x}</span>
+        ))}
       </div>
     </div>
   );

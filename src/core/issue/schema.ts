@@ -32,19 +32,19 @@ export const FontSpecSchema = z.object({
 export const BrandSchema = z.object({
   logoText: z.string().optional(),
   logoUrl: z.string().optional(),
-  primaryColor: z.string().default("#0057A8"),
-  accentColor: z.string().default("#00B5CC"),
+  primaryColor: z.string().default("#4F7FFF"),
+  accentColor: z.string().default("#7C3AED"),
   footerLinks: z.array(LinkSchema).default([])
 });
 
 export const ThemeSchema = z.object({
   fonts: z.array(FontSpecSchema).default([]),
-  maxWidthPx: z.number().int().min(320).max(1600).default(1100),
-  radiusPx: z.number().int().min(0).max(32).default(16),
-  bg: z.string().default("#03080F"),
-  panel: z.string().default("rgba(255,255,255,0.06)"),
+  maxWidthPx: z.number().int().min(320).max(1600).default(680),
+  radiusPx: z.number().int().min(0).max(32).default(12),
+  bg: z.string().default("#0A0C0F"),
+  panel: z.string().default("rgba(255,255,255,0.05)"),
   text: z.string().default("rgba(255,255,255,0.92)"),
-  muted: z.string().default("rgba(255,255,255,0.65)")
+  muted: z.string().default("rgba(255,255,255,0.60)")
 });
 
 export const AssetSchema = z.object({
@@ -58,14 +58,15 @@ export const AssetSchema = z.object({
 
 export const BlockSchema = z.object({
   id: z.string().min(1),
-  type: z.enum(["text","article","ticker","rss","image"]),
+  type: z.enum(["text","article","ticker","image","html","divider","button","spacer"]),
+  label: z.string().optional(),
   data: z.record(z.any())
 });
 
 export const SectionSchema = z.object({
   id: z.string().min(1),
   title: z.string().default(""),
-  layout: z.enum(["single","twoColumn"]).default("single"),
+  layout: z.enum(["single","twoColumn","threeColumn"]).default("single"),
   blocks: z.array(BlockSchema).default([])
 });
 
@@ -78,7 +79,7 @@ export const FeedSourceSchema = z.object({
 });
 
 export const IssueSchema = z.object({
-  schemaVersion: z.number().int().default(2),
+  schemaVersion: z.number().int().default(3),
   meta: IssueMetaSchema,
   brand: BrandSchema,
   theme: ThemeSchema,

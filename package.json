@@ -1,16 +1,14 @@
 {
-  "name": "nap-news-vnext",
+  "name": "newsforge",
   "private": true,
-  "version": "0.2.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Free, open-source newsletter builder. Runs entirely in the browser.",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
-    "lint": "eslint .",
-    "deploy": "gh-pages -d dist",
-    "export:web": "node scripts/export-web.mjs",
-    "export:web:zip": "node scripts/export-web-zip.mjs"
+    "lint": "eslint ."
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -27,7 +25,6 @@
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.11",
-    "gh-pages": "^6.1.1",
     "typescript": "^5.5.4",
     "vite": "^5.4.21"
   }

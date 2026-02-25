@@ -1,7 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import type { Issue } from "../core/issue/schema";
 import type { RenderMode } from "./modes";
-import { applyIssueTheme } from "../core/theme/applyTheme";
 import { Page } from "./layout/Page";
 import { Header } from "./layout/Header";
 import { Footer } from "./layout/Footer";
@@ -10,9 +9,13 @@ import { BlockHost } from "./blocks/BlockHost";
 import { IssueProvider } from "../shared/IssueContext";
 
 function SectionLayout({ section, mode }: { section: Issue["sections"][number]; mode: RenderMode }) {
-  const two = section.layout === "twoColumn";
+  const colClass =
+    section.layout === "twoColumn" ? "nl-grid nl-grid-2" :
+    section.layout === "threeColumn" ? "nl-grid nl-grid-3" :
+    "nl-grid nl-grid-1";
+
   return (
-    <div className={two ? "grid two" : "grid one"}>
+    <div className={colClass}>
       {section.blocks.map((b) => (
         <BlockHost key={b.id} block={b} mode={mode} />
       ))}
@@ -21,22 +24,18 @@ function SectionLayout({ section, mode }: { section: Issue["sections"][number]; 
 }
 
 export function Renderer({ issue, mode }: { issue: Issue; mode: RenderMode }) {
-  const hostRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (hostRef.current) applyIssueTheme(issue, hostRef.current);
-  }, [issue]);
-
   return (
     <IssueProvider issue={issue}>
-      <div ref={hostRef} className="host">
+      <div className="nl-root">
         <Page issue={issue} mode={mode}>
           <Header issue={issue} />
-          {issue.sections.map((s) => (
-            <SectionFrame key={s.id} section={s}>
-              <SectionLayout section={s} mode={mode} />
-            </SectionFrame>
-          ))}
+          <div className="nl-body-wrap">
+            {issue.sections.map((s) => (
+              <SectionFrame key={s.id} section={s}>
+                <SectionLayout section={s} mode={mode} />
+              </SectionFrame>
+            ))}
+          </div>
           <Footer issue={issue} />
         </Page>
       </div>

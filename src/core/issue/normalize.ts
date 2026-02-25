@@ -9,7 +9,16 @@ export function normalizeIssue(input: unknown): Issue {
       if (s && s.blocks && !Array.isArray(s.blocks)) s.blocks = Object.values(s.blocks);
     }
   }
-  if (candidate?.assets && !Array.isArray(candidate.assets)) candidate.assets = Object.values(candidate.assets);
+  if (candidate?.assets && !Array.isArray(candidate.assets)) {
+    candidate.assets = Object.values(candidate.assets);
+  }
+
+  // Normalize old layout names
+  if (Array.isArray(candidate?.sections)) {
+    for (const s of candidate.sections) {
+      if (s.layout === "twoColumn") s.layout = "twoColumn"; // already valid
+    }
+  }
 
   return IssueSchema.parse(candidate);
 }
