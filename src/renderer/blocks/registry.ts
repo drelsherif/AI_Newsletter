@@ -8,6 +8,7 @@ import { HtmlBlock } from "./types/HtmlBlock";
 import { DividerBlock } from "./types/DividerBlock";
 import { ButtonBlock } from "./types/ButtonBlock";
 import { SpacerBlock } from "./types/SpacerBlock";
+import { RSSBlock } from "./types/RSSBlock";
 
 export type BlockRenderProps = { block: Block; mode: RenderMode };
 
@@ -25,55 +26,62 @@ export const blockRegistry: Record<Block["type"], BlockDefinition> = {
     description: "Rich text with heading, body, and links",
     emailSafe: true,
     icon: "T",
-    Render: TextBlock
+    Render: TextBlock,
   },
   article: {
     title: "Article",
-    description: "Title, source, summary, and link",
+    description: "Title, source, summary, and read more link",
     emailSafe: true,
     icon: "A",
-    Render: ArticleBlock
+    Render: ArticleBlock,
   },
   ticker: {
     title: "Ticker",
-    description: "Scrolling pill-style announcements",
+    description: "Pill-style announcement strip",
     emailSafe: true,
     icon: "~",
-    Render: TickerBlock
+    Render: TickerBlock,
   },
   image: {
     title: "Image",
-    description: "Image with optional caption",
+    description: "Upload or link an image with caption",
     emailSafe: true,
     icon: "⊡",
-    Render: ImageBlock
+    Render: ImageBlock,
   },
   html: {
     title: "HTML",
-    description: "Custom HTML code block with label",
+    description: "Custom HTML block with label",
     emailSafe: true,
-    icon: "</>",
-    Render: HtmlBlock
+    icon: "<>",
+    Render: HtmlBlock,
   },
   divider: {
     title: "Divider",
-    description: "Line, dots, or blank space separator",
+    description: "Line, dots, or blank space",
     emailSafe: true,
     icon: "—",
-    Render: DividerBlock
+    Render: DividerBlock,
   },
   button: {
     title: "Button",
-    description: "Call-to-action button with custom color",
+    description: "CTA button with custom color",
     emailSafe: true,
-    icon: "⬡",
-    Render: ButtonBlock
+    icon: "◉",
+    Render: ButtonBlock,
   },
   spacer: {
     title: "Spacer",
-    description: "Adjustable blank vertical space",
+    description: "Adjustable vertical blank space",
     emailSafe: true,
     icon: "↕",
-    Render: SpacerBlock
-  }
+    Render: SpacerBlock,
+  },
+  rss: {
+    title: "RSS Feed",
+    description: "Live articles from RSS/Atom feeds",
+    emailSafe: true,
+    icon: "📡",
+    Render: RSSBlock,
+  },
 };
