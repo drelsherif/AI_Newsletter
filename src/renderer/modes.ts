@@ -1,0 +1,1 @@
+export type RenderMode = "edit" | "view" | "email";
